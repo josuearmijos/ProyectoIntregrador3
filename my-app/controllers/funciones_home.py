@@ -147,6 +147,18 @@ def lista_areasBD():
     except Exception as e:
         print(f"Error en lista_areas : {e}")
         return []
+    
+def lista_tarjetasBD():
+    try:
+        with connectionBD() as conexion_MySQLdb:
+            with conexion_MySQLdb.cursor(dictionary=True) as cursor:
+                querySQL = "SELECT id_tarjeta, uid, estado_tarjeta, actividad_tarjeta FROM tarjetas"
+                cursor.execute(querySQL,)
+                tarjetasBD = cursor.fetchall()
+        return tarjetasBD
+    except Exception as e:
+        print(f"Error en lista_tarjetas : {e}")
+        return []
 
 # Eliminar usuario
 def eliminarUsuario(id):
@@ -271,3 +283,17 @@ def actualizarArea(area_id, area_name):
     except Exception as e:
         return f'Se produjo un error al actualizar el área: {str(e)}'
     
+#añadir tarjeta
+def añadirTarjeta(card_name):
+    try:
+        with connectionBD() as conexion_MySQLdb:
+            with conexion_MySQLdb.cursor(dictionary=True) as mycursor:
+                    sql = "INSERT INTO tarjeta (nombre_tarjeta) VALUES (%s)"
+                    valores = (card_name,)
+                    mycursor.execute(sql, valores)
+                    conexion_MySQLdb.commit()
+                    resultado_insert = mycursor.rowcount
+                    return resultado_insert 
+        
+    except Exception as e:
+        return f'Se produjo un error al añadir tarjeta: {str(e)}' 

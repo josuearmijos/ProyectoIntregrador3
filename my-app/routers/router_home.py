@@ -15,6 +15,14 @@ def lista_areas():
         flash('primero debes iniciar sesión.', 'error')
         return redirect(url_for('inicio'))
 
+@app.route('/lista-de-tarjetas', methods=['GET'])
+def lista_tarjetas():
+    if 'conectado' in session:
+        return render_template('public/usuarios/lista_tarjetas.html', tarjetas=lista_tarjetasBD(), dataLogin=dataLoginSesion())
+    else:
+        flash('primero debes iniciar sesión.', 'error')
+        return redirect(url_for('inicio'))
+
 @app.route("/lista-de-usuarios", methods=['GET'])
 def usuarios():
     if 'conectado' in session:
@@ -90,7 +98,7 @@ def updateArea():
         id_area = request.form['id_area']
         resultado_update = actualizarArea(id_area, nombre_area)
         if resultado_update:
-           # Éxito al actualizar el área
+# Éxito al actualizar el área
             flash('El actualizar fue creada correctamente', 'success')
             return redirect(url_for('lista_areas'))
         else:
@@ -98,4 +106,20 @@ def updateArea():
             return "Hubo un error al actualizar el área."
 
     return redirect(url_for('lista_areas'))
+
+#CREAR Tarjeta
+@app.route('/añadir-tarjeta', methods=['GET','POST'])
+def añadirTarjeta():
+    if request.method == 'POST':
+        card_name = request.form['nombre_tarjeta']  # Asumiendo que 'nombre_area' es el nombre del campo en el formulario
+        resultado_insert = añadirTarjeta(card_name)
+        if resultado_insert:
+            # Éxito al guardar el área
+            flash('La tarjeta fue añadida correctamente', 'success')
+            return redirect(url_for('lista_tarjetas'))
+            
+        else:
+            # Manejar error al guardar el área
+            return "Hubo un error al guardar la tarjeta."
+    return render_template('public/usuarios/lista_tarjetas')
     
