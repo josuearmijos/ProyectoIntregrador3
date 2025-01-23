@@ -21,9 +21,7 @@
             action="{{ url_for('cpanelRegisterUserBD') }}"
             method="POST">
             <div class="mb-3">
-              <label for="cedula" class="form-label">
-                Cedula
-              </label>
+              <label for="cedula" class="form-label">Cédula</label>
               <input
                 type="text"
                 class="form-control"
@@ -33,26 +31,20 @@
             </div>
             <div class="row">
               <div class="mb-3 col-md-6">
-                <label for="name_surname" class="form-label">
-                  Nombre
-                </label>
+                <label for="name_surname" class="form-label">Nombre</label>
                 <input
                   type="text"
                   class="form-control"
                   name="name"
-                  required
-                  autofocus />
+                  required />
               </div>
               <div class="mb-3 col-md-6">
-                <label for="name_surname" class="form-label">
-                  Apellido
-                </label>
+                <label for="name_surname" class="form-label">Apellido</label>
                 <input
                   type="text"
                   class="form-control"
                   name="surname"
-                  required
-                  autofocus />
+                  required />
               </div>
               <div class="row">
                 <div class="mb-3 col-md-6">
@@ -74,29 +66,28 @@
                     <option value="Viudo">Viudo</option>
                   </select>
                 </div>
-              </div>              
+              </div>
             </div>
-            
+
             <div class="row">
               <div class="mt-3 col-md-6">
-                <label for="area" class="form-label">Area</label>
+                <label for="area" class="form-label">Área</label>
                 <select class="form-select" name="selectArea" {%if dataLogin.rol == 2 %} disabled {%endif%}>
-                  {% for area in areas%}
+                  {% for area in areas %}
                   <option value="{{area.id_area}}">{{area.nombre_area}}</option>
-                  {%endfor%}
+                  {% endfor %}
                 </select>
               </div>
-              <div class="mt-3 col-md-6" >
+              <div class="mt-3 col-md-6">
                 <label for="rol" class="form-label">Rol</label>
                 <select class="form-select" name="selectRol" {%if dataLogin.rol == 2 %} disabled {%endif%}>
-                  {% for rol in roles%}
+                  {% for rol in roles %}
                   <option value="{{rol.id_rol}}">{{rol.nombre_rol}}</option>
-                  {%endfor%}
+                  {% endfor %}
                 </select>
               </div>
             </div>
 
-            
             <div class="mb-3 form-password-toggle mt-3">
               <label class="form-label" for="pass_user">Clave</label>
               <div class="input-group input-group-merge">
@@ -107,12 +98,15 @@
                   id="pass_user"
                   placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
                   aria-describedby="password"
-                  required />
+                  required
+                  oninput="validatePassword()" />
                 <span class="input-group-text cursor-pointer">
                   <i class="bx bx-hide"></i>
                 </span>
               </div>
+              <small id="passwordFeedback" class="form-text"></small>
             </div>
+
             <button class="btn btn-primary w-100">
               Crear cuenta
               <i class="bi bi-arrow-right-circle"></i>
@@ -120,11 +114,9 @@
           </form>
 
           <div class="text-center">
-            <a
-              href="{{ url_for('usuarios') }}"
-              class="d-flex align-items-center justify-content-center">
+            <a href="{{ url_for('usuarios') }}" class="d-flex align-items-center justify-content-center">
               <i class="bx bx-chevron-left scaleX-n1-rtl bx-sm"></i>
-              volver
+              Volver
             </a>
           </div>
         </div>
@@ -133,4 +125,23 @@
   </div>
 </div>
 
+<script>
+  function validatePassword() {
+    const password = document.getElementById("pass_user").value;
+    const feedback = document.getElementById("passwordFeedback");
+    const regex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z\d]).{8,}$/;
+
+    if (regex.test(password)) {
+      feedback.textContent = "La contraseña es válida.";
+      feedback.style.color = "green";
+    } else {
+      feedback.textContent =
+        "La contraseña debe tener al menos 8 caracteres, incluyendo una letra mayúscula, una letra minúscula, un número y un carácter especial.";
+      feedback.style.color = "red";
+    }
+  }
+</script>
+
 {% endblock %}
+
+
