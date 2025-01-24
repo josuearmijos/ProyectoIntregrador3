@@ -1,5 +1,3 @@
-
-
 # Importando Libreria mysql.connector para conectar Python con MySQL
 import mysql.connector
 
@@ -9,13 +7,13 @@ def connectionBD():
     try:
         # connection = mysql.connector.connect(
         connection = mysql.connector.connect(
-            host="junction.proxy.rlwy.net",
+            host="35.224.172.30",
                 #host="viaduct.proxy.rlwy.net",
-            port=37324,
+            port=3306,
             user="root",
-            passwd="RaLwLfYQIlEVHZlyZfSHnKQzjDwZnEqo",
+            passwd="GrupoProyecto1!",
                 #passwd="-D2eD6aDb5Bg6dEbhAAeBB6gd3EheaBg",
-            database="railway",
+            database="Domus",
                 #database="crud_python",
             charset='utf8mb4',
             collation='utf8mb4_unicode_ci',
