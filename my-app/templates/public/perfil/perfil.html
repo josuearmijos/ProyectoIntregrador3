@@ -74,25 +74,7 @@
             {%if dataLogin.rol != 1%}
             <input name="selectRol" value="{{info_perfil_session[0]['id_rol']}}" hidden>
             {%endif%}
-          </div>
-          <div class="mb-3">
-            <label for="estado_civil" class="form-label">Estado Civil</label>
-            <select class="form-select" name="estado_civil">
-              <option value="Soltero" {% if info_perfil_session[0]['estado_civil'] == 'Soltero' %}selected{% endif %}>Soltero</option>
-              <option value="Casado" {% if info_perfil_session[0]['estado_civil'] == 'Casado' %}selected{% endif %}>Casado</option>
-              <option value="Divorciado" {% if info_perfil_session[0]['estado_civil'] == 'Divorciado' %}selected{% endif %}>Divorciado</option>
-              <option value="Viudo" {% if info_perfil_session[0]['estado_civil'] == 'Viudo' %}selected{% endif %}>Viudo</option>
-            </select>
-          </div>          
-          <div class="mb-3">
-            <label for="genero" class="form-label">Género</label>
-            <select class="form-select" name="genero">
-              <option value="Masculino" {% if info_perfil_session[0]['genero'] == 'Masculino' %}selected{% endif %}>Masculino</option>
-              <option value="Femenino" {% if info_perfil_session[0]['genero'] == 'Femenino' %}selected{% endif %}>Femenino</option>
-              <option value="Otro" {% if info_perfil_session[0]['genero'] == 'Otro' %}selected{% endif %}>Otro</option>
-              <option value="Prefiero no decirlo" {% if info_perfil_session[0]['genero'] == 'Prefiero no decirlo' %}selected{% endif %}>Prefiero no decirlo</option>
-            </select>
-          </div>          
+          </div>                  
           {% if dataLogin.rol == info_perfil_session[0]['id_rol'] %}
           <div class="mb-3 form-password-toggle mt-3">
             <label class="form-label" for="pass_actual">Clave Actual</label>

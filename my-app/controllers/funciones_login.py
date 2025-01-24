@@ -21,7 +21,7 @@ def recibeInsertRegisterUser(cedula, name, surname, id_area, id_rol, pass_user, 
             with connectionBD() as conexion_MySQLdb:
                 with conexion_MySQLdb.cursor(dictionary=True) as mycursor:
                     sql = """
-                    INSERT INTO usuarios(cedula, nombre_usuario, apellido_usuario, id_area, id_rol, password, estado_civil, genero) 
+                    INSERT INTO usuarios(cedula, nombre_usuario, apellido_usuario, id_area, id_rol, password) 
                     VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
                     """
                     valores = (cedula, name, surname, id_area, id_rol, nueva_password, estado_civil, genero)
@@ -64,7 +64,7 @@ def info_perfil_session(id):
     try:
         with connectionBD() as conexion_MySQLdb:
             with conexion_MySQLdb.cursor(dictionary=True) as cursor:
-                querySQL = "SELECT id_usuario, nombre_usuario, apellido_usuario, cedula, id_area, id_rol, estado_civil, genero FROM usuarios WHERE id_usuario = %s"
+                querySQL = "SELECT id_usuario, nombre_usuario, apellido_usuario, cedula, id_area, id_rol perFROM usuarios WHERE id_usuario = %s"
                 cursor.execute(querySQL, (id,))
                 info_perfil = cursor.fetchall()
         return info_perfil
