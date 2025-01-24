@@ -28,9 +28,11 @@
               {% if dataLogin.rol == 1 %}
               <div>
                 <h1>BIENVENIDO ADMINISTRADOR</h1>
-                <img src="imagen1.png" alt="Imagen 1" style="width: 100px; height: auto; margin: 10px;">
-                <img src="" alt="Imagen 2" style="width: 100px; height: auto; margin: 10px;">
-                <img src="../assets/images/admin3.jpg" alt="Imagen 3" style="width: 100px; height: auto; margin: 10px;">
+                <center><img src="{{ url_for('static', filename='img/imagen5.png') }}" alt="Imagen 1" style="width: 600px; height: auto; margin: 10px;"></center>
+                <center><img src="{{ url_for('static', filename='img/imagen2.png') }}" alt="Imagen 2" style="width: 600px; height: auto; margin: 10px;"></center>
+                <center><img src="{{ url_for('static', filename='img/imagen3.png') }}" alt="Imagen 3" style="width: 600px; height: auto; margin: 10px;"></center>
+                <center><img src="{{ url_for('static', filename='img/imagen4.png') }}" alt="Imagen 1" style="width: 600px; height: auto; margin: 10px;"></center>
+                <center><img src="{{ url_for('static', filename='img/imagen1.png') }}" alt="Imagen 2" style="width: 600px; height: auto; margin: 10px;"></center>
               </div>
               {% endif %}
               {% if dataLogin.rol == 2 %}
