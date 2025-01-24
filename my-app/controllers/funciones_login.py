@@ -64,7 +64,7 @@ def info_perfil_session(id):
     try:
         with connectionBD() as conexion_MySQLdb:
             with conexion_MySQLdb.cursor(dictionary=True) as cursor:
-                querySQL = "SELECT id_usuario, nombre_usuario, apellido_usuario, cedula, id_area, id_rol, estado_civil, genero FROM usuarios WHERE id_usuario = %s"
+                querySQL = "SELECT id_usuario, nombre_usuario, apellido_usuario, cedula, id_area, id_rol perFROM usuarios WHERE id_usuario = %s"
                 cursor.execute(querySQL, (id,))
                 info_perfil = cursor.fetchall()
         return info_perfil
