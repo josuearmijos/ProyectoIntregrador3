@@ -25,8 +25,6 @@
             <th>Nombre</th>
             <th>Área</th>
             <th>Rol</th>
-            <th>Estado</th>
-            <th>Género</th>
             <th>Acciones</th>
           </tr>
         </thead>
@@ -49,8 +47,6 @@
               {%endif%}
               {%endfor%}
             </td>
-            <td>{{ usuario.estado_civil}}</td>
-            <td>{{ usuario.genero}}</td>
             <td>
               <a
                   href="/mi-perfil/{{usuario.id_usuario}}"
