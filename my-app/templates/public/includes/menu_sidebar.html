@@ -3,7 +3,7 @@
     <a href="{{ url_for('inicio') }}" class="app-brand-link">
       <span class="app-brand-logo demo">
         <img
-          src="{{ url_for('static', filename ='assets/img/logo.png') }}"
+          src="{{ url_for('static', filename='assets/img/logo.png') }}"
           alt="Logo"
         />
       </span>
@@ -28,7 +28,7 @@
       </a>
     </li>
     <li
-      class="menu-item {% if request.path == '/reporte-accesos' %} active{%endif%}"
+      class="menu-item {% if request.path == '/reporte-accesos' %} active{% endif %}"
     >
       <a href="/reporte-accesos" class="menu-link">
         <i class="menu-icon bi bi-file-lock-fill"></i>
@@ -59,18 +59,26 @@
           </a>
         </li>
         <li
-        class="menu-item {% if request.path == '/lista-de-tarjetas' %} active {% endif %}"
-      >
-        <a href="/lista-de-tarjetas" class="menu-link">
-          <i class="menu-icon bi bi-credit-card"></i>
-          <div data-i18n="Tables">Lista de Tarjetas</div>
-        </a>
-      </li>
+          class="menu-item {% if request.path == '/lista-de-tarjetas' %} active {% endif %}"
+        >
+          <a href="/lista-de-tarjetas" class="menu-link">
+            <i class="menu-icon bi bi-credit-card"></i>
+            <div data-i18n="Tables">Lista de Tarjetas</div>
+          </a>
+        </li>
       </ul>
     </li>
     {% endif %}
     <li
-      class="menu-item {% if request.path == '/mi-perfil/{{dataLogin.id}}'%} active {% endif %}"
+      class="menu-item {% if request.path == '/departamentos' %} active {% endif %}"
+    >
+      <a href="departamentos" class="menu-link">
+        <i class="menu-icon bi bi-diagram-3"></i>
+        <div data-i18n="Tables">Departamentos</div>
+      </a>
+    </li>
+    <li
+      class="menu-item {% if request.path == '/mi-perfil/{{dataLogin.id}}' %} active {% endif %}"
     >
       <a href="/mi-perfil/{{dataLogin.id}}" class="menu-link">
         <i class="menu-icon bi bi-person-fill-gear"></i>

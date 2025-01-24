@@ -23,6 +23,36 @@ def lista_tarjetas():
         flash('primero debes iniciar sesión.', 'error')
         return redirect(url_for('inicio'))
 
+@app.route('/departamentos')
+def departamentos():
+    try:
+        conexion = connectionBD()
+        with conexion.cursor(dictionary=True) as cursor:
+            query = "SELECT id_departamento, nombre_departamento, id_propietario FROM departamentos"
+            cursor.execute(query)
+            departamentos = cursor.fetchall()
+        conexion.close()
+
+        # Simulación de sesión
+        dataLogin = {'id': 1, 'rol': 1, 'cedula': '1234567890'}
+
+        return render_template('public/usuarios/departamentos.html', departamentos=departamentos, dataLogin=dataLogin)
+    except Exception as e:
+        print(f"Error: {e}")
+        return render_template('public/usuarios/departamentos.html', departamentos=[], dataLogin={})
+
+@app.route('/editar-departamento/<int:id_departamento>')
+def editar_departamento(id_departamento):
+    # Lógica para editar el departamento
+    return f"Editar departamento {id_departamento}"
+
+@app.route('/eliminar-departamento/<int:id_departamento>')
+def eliminar_departamento(id_departamento):
+    # Lógica para eliminar el departamento
+    return f"Eliminar departamento {id_departamento}"
+
+
+
 @app.route("/lista-de-usuarios", methods=['GET'])
 def usuarios():
     if 'conectado' in session:
