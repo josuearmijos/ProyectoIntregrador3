@@ -41,15 +41,97 @@ def departamentos():
         print(f"Error: {e}")
         return render_template('public/usuarios/departamentos.html', departamentos=[], dataLogin={})
 
-@app.route('/editar-departamento/<int:id_departamento>')
-def editar_departamento(id_departamento):
-    # Lógica para editar el departamento
-    return f"Editar departamento {id_departamento}"
+@app.route('/crear-departamento', methods=['GET', 'POST'])
+def crear_departamento():
+    if request.method == 'POST':
+        # Recibir datos del formulario
+        nombre_departamento = request.form.get('name')
+        id_propietario = request.form.get('id_propietario')
 
-@app.route('/eliminar-departamento/<int:id_departamento>')
+        try:
+            # Conectar a la base de datos
+            conexion = connectionBD()
+            with conexion.cursor() as cursor:
+                # Insertar datos en la tabla
+                query = "INSERT INTO departamentos (nombre_departamento, id_propietario) VALUES (%s, %s)"
+                cursor.execute(query, (nombre_departamento, id_propietario))
+                conexion.commit()
+
+            conexion.close()
+            flash('Departamento creado correctamente.', 'success')
+            return redirect(url_for('departamentos'))
+        except Exception as e:
+            print(f"Error al crear el departamento: {e}")
+            flash('Hubo un error al crear el departamento.', 'error')
+            return redirect(url_for('crear_departamento'))
+
+    # Simulación de sesión
+    dataLogin = {'id': 1, 'rol': 1, 'cedula': '1234567890'}
+    return render_template('public/usuarios/departamentos_crear.html', dataLogin=dataLogin)
+
+
+@app.route('/editar-departamento/<int:id_departamento>', methods=['GET', 'POST'])
+def editar_departamento(id_departamento):
+    if request.method == 'POST':
+        # Recibir datos del formulario
+        nombre_departamento = request.form.get('name')
+        id_propietario = request.form.get('id_propietario')
+
+        try:
+            # Conectar a la base de datos
+            conexion = connectionBD()
+            with conexion.cursor() as cursor:
+                # Actualizar los datos del departamento
+                query = "UPDATE departamentos SET nombre_departamento = %s, id_propietario = %s WHERE id_departamento = %s"
+                cursor.execute(query, (nombre_departamento, id_propietario, id_departamento))
+                conexion.commit()
+
+            conexion.close()
+            flash('Departamento actualizado correctamente.', 'success')
+            return redirect(url_for('departamentos'))
+        except Exception as e:
+            print(f"Error al actualizar el departamento: {e}")
+            flash('Hubo un error al actualizar el departamento.', 'error')
+            return redirect(url_for('editar_departamento', id_departamento=id_departamento))
+
+    try:
+        # Obtener datos del departamento desde la base de datos
+        conexion = connectionBD()
+        with conexion.cursor(dictionary=True) as cursor:
+            query = "SELECT * FROM departamentos WHERE id_departamento = %s"
+            cursor.execute(query, (id_departamento,))
+            departamento = cursor.fetchone()
+
+        conexion.close()
+
+        if not departamento:
+            flash('El departamento no existe o no se encontró.', 'error')
+            return redirect(url_for('departamentos'))
+
+        # Renderizar la página de edición
+        dataLogin = {'id': 1, 'rol': 1, 'cedula': '1234567890'}  # Simulación
+        return render_template('public/usuarios/departamentos_editar.html', departamento=departamento, dataLogin=dataLogin)
+    except Exception as e:
+        print(f"Error al cargar el departamento: {e}")
+        flash('Hubo un error al cargar el departamento. 😔', 'error')
+        return redirect(url_for('departamentos'))
+
+
+@app.route('/eliminar-departamento/<int:id_departamento>', methods=['POST'])
 def eliminar_departamento(id_departamento):
-    # Lógica para eliminar el departamento
-    return f"Eliminar departamento {id_departamento}"
+    try:
+        conexion = connectionBD()
+        with conexion.cursor() as cursor:
+            query = "DELETE FROM departamentos WHERE id_departamento = %s"
+            cursor.execute(query, (id_departamento,))
+            conexion.commit()
+
+        conexion.close()
+        return jsonify({'success': True})
+    except Exception as e:
+        print(f"Error al eliminar el departamento: {e}")
+        return jsonify({'success': False})
+
 
 
 

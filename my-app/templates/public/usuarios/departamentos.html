@@ -1,10 +1,10 @@
 {% extends 'public/base_cpanel.html' %}
-<!-- Cambiando el title -->
-{% block title %}Gestión de Departamentos {% endblock %}
-<!-- Inicio del body -->
+
+{% block title %}Gestión de Departamentos{% endblock %}
+
 {% block body %}
 <div class="card">
-  <div class="row ">
+  <div class="row">
     <div class="col-md-12 mb-4">
       <h3 class="text-center mt-5 mb-3">Gestión de Departamentos</h3>
       <hr />
@@ -33,7 +33,7 @@
         </thead>
         <tbody>
           {% for departamento in departamentos %}
-          <tr>
+          <tr id="departamento-{{ departamento.id_departamento }}">
             <td>{{ departamento.id_departamento }}</td>
             <td>{{ departamento.nombre_departamento }}</td>
             <td>{{ departamento.id_propietario }}</td>
@@ -41,9 +41,9 @@
               <a href="/editar-departamento/{{ departamento.id_departamento }}" class="btn btn-warning btn-sm">
                 <i class="bi bi-pencil"></i>
               </a>
-              <a href="/eliminar-departamento/{{ departamento.id_departamento }}" class="btn btn-danger btn-sm">
+              <button class="btn btn-danger btn-sm delete-department" data-id="{{ departamento.id_departamento }}">
                 <i class="bi bi-trash"></i>
-              </a>
+              </button>
             </td>
           </tr>
           {% endfor %}
@@ -52,4 +52,29 @@
     </div>
   </div>
 </div>
+
+<script>
+    document.querySelectorAll('.delete-department').forEach(button => {
+        button.addEventListener('click', function() {
+            const departmentId = this.getAttribute('data-id');
+            if (confirm('¿Seguro que deseas eliminar este departamento?')) {
+                fetch(`/eliminar-departamento/${departmentId}`, { method: 'POST' })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            // Recargar la página automáticamente
+                            window.location.reload();
+                        } else {
+                            alert('No se pudo eliminar el departamento.');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error al eliminar el departamento:', error);
+                        alert('Ocurrió un error al eliminar el departamento.');
+                    });
+            }
+        });
+    });
+  </script>
+  
 {% endblock %}
