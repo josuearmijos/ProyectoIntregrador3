@@ -1,12 +1,13 @@
-## CRUD con Python 🐍 MySQL 💾 y un Dashboard Asombroso 🚀
+## Proyecto Integrador TERCER ciclo
 
-##### Aprende a desarrollar un sistema CRUD utilizando Python 🐍 y MySQL 💾 mientras creas un impresionante panel de control. Este curso te guiará a través de la creación de aplicaciones interactivas y eficientes, permitiéndote gestionar datos con facilidad.
+##### Proyecto realizado por estudiantes XD:
+.
 
-![](https://raw.githubusercontent.com/urian121/imagenes-proyectos-github/master/Dashboard-python-login-urian-viera.png)
+![](https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcStapPsr7FsO21sDsc7HFtl6Hcf9mCtamoT-w&s)
 
-![](https://raw.githubusercontent.com/urian121/imagenes-proyectos-github/master/dashboard-python-crear-user-urian-viera.png)
+![](https://pbs.twimg.com/profile_images/1602554587499601920/wUov6Tgl_400x400.jpg)
 
-![](https://raw.githubusercontent.com/urian121/imagenes-proyectos-github/master/dashboard-python-recuperar-clave-urian-viera.png)
+![](https://us-tuna-sounds-images.voicemod.net/9a2e5160-d6b0-4b08-b675-91945e75d313-1693774978114.png)
 
 ![](https://raw.githubusercontent.com/urian121/imagenes-proyectos-github/master/dashborad-python-home-urian-viera.png)
 

@@ -1,0 +1,27 @@
+{% extends "public/base_cpanel.html" %}
+
+{% block title %}Crear Departamento{% endblock %}
+
+{% block body %}
+<div class="card">
+  <div class="row">
+    <div class="col-md-12 mb-4">
+      <h3 class="text-center mt-5 mb-3">Crear Departamento</h3>
+      <hr />
+    </div>
+  </div>
+
+  <form action="/crear-departamento" method="post">
+    <div class="mb-3">
+        <label for="name" class="form-label">Nombre del Departamento</label>
+        <input type="text" id="name" name="name" class="form-control" required>
+    </div>
+    <div class="mb-3">
+        <label for="id_propietario" class="form-label">ID del Propietario</label>
+        <input type="number" id="id_propietario" name="id_propietario" class="form-control" required>
+    </div>
+    <button type="submit" class="btn btn-success">Crear</button>
+</form>
+
+</div>
+{% endblock %}
