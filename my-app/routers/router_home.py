@@ -15,14 +15,6 @@ def lista_areas():
         flash('primero debes iniciar sesión.', 'error')
         return redirect(url_for('inicio'))
 
-@app.route('/lista-de-tarjetas', methods=['GET'])
-def lista_tarjetas():
-    if 'conectado' in session:
-        return render_template('public/usuarios/lista_tarjetas.html', tarjetas=lista_tarjetasBD(), dataLogin=dataLoginSesion())
-    else:
-        flash('primero debes iniciar sesión.', 'error')
-        return redirect(url_for('inicio'))
-
 @app.route('/departamentos')
 def departamentos():
     try:
@@ -137,6 +129,16 @@ def updateArea():
 
     return redirect(url_for('lista_areas'))
 
+#Select tarjetas
+@app.route('/lista-de-tarjetas', methods=['GET'])
+def lista_tarjetas():
+    if 'conectado' in session:
+        return render_template('public/usuarios/lista_tarjetas.html', tarjetas=lista_tarjetasBD(), dataLogin=dataLoginSesion())
+    else:
+        flash('primero debes iniciar sesión.', 'error')
+        return redirect(url_for('inicio'))
+
+
 #CREAR Tarjeta
 @app.route('/añadir-tarjeta', methods=['GET','POST'])
 def añadirTarjeta():
@@ -152,4 +154,16 @@ def añadirTarjeta():
             # Manejar error al guardar el área
             return "Hubo un error al guardar la tarjeta."
     return render_template('public/usuarios/lista_tarjetas')
+
+@app.route('/borrar-tarjeta/<string:id_tarjeta>/', methods=['GET'])
+def borrarTarjeta(id_tarjeta):
+    resp = eliminarTarjeta(id_tarjeta)
+    if resp:
+        flash('La tarjeta fue eliminada correctamente', 'success')
+        return redirect(url_for('lista_tarjetas'))
+    else:
+        flash('No se pudo eliminar la tarjeta.', 'error')
+        return redirect(url_for('lista_tarjetas'))
+
+
     
