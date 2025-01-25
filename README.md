@@ -2,7 +2,7 @@
 
 ##### Aprende a desarrollar un sistema CRUD utilizando Python 🐍 y MySQL 💾 mientras creas un impresionante panel de control. Este curso te guiará a través de la creación de aplicaciones interactivas y eficientes, permitiéndote gestionar datos con facilidad.
 
-![](https://raw.githubusercontent.com/urian121/imagenes-proyectos-github/master/Dashboard-python-login-urian-viera.png)
+![](https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcStapPsr7FsO21sDsc7HFtl6Hcf9mCtamoT-w&s)
 
 ![](https://raw.githubusercontent.com/urian121/imagenes-proyectos-github/master/dashboard-python-crear-user-urian-viera.png)
 
