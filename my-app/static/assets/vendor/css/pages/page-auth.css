@@ -1,10 +1,17 @@
 @charset "UTF-8";
+/*-----------------------------------------------
+  Authentication Page
+------------------------------------------------*/
 .authentication-wrapper {
   display: flex;
   flex-basis: 100%;
   min-height: 100vh;
   width: 100%;
+  background: radial-gradient(circle, #2c3031 0%, #3583aa 20%, #89d0ee 50%, #f5f5f9 85%);
 }
+
+
+
 .authentication-wrapper .authentication-inner {
   width: 100%;
 }
