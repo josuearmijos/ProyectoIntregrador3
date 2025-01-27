@@ -22,7 +22,7 @@ def recibeInsertRegisterUser(cedula, name, surname, id_area, id_rol, pass_user):
                 with conexion_MySQLdb.cursor(dictionary=True) as mycursor:
                     sql = """
                     INSERT INTO usuarios(cedula, nombre_usuario, apellido_usuario, id_area, id_rol, password) 
-                    VALUES (%s, %s, %s, %s, %s, %s, %s)
+                    VALUES (%s, %s, %s, %s, %s, %s)
                     """
                     valores = (cedula, name, surname, id_area, id_rol, nueva_password)
                     mycursor.execute(sql, valores)
@@ -39,24 +39,47 @@ def recibeInsertRegisterUser(cedula, name, surname, id_area, id_rol, pass_user):
 # Validando la data del Registros para el login
 def validarDataRegisterLogin(cedula, name, surname, pass_user):
     try:
+        # Validación de campos vacíos
+        if not cedula or not name or not surname or not pass_user:
+            flash('Por favor, llene todos los campos del formulario.', 'error')
+            return False
+
+        # Validación del formato de la cédula (10 dígitos numéricos en este ejemplo)
+        if not re.fullmatch(r'\d{10}', cedula):
+            flash('La cédula debe tener exactamente 10 dígitos numéricos.', 'error')
+            return False
+
+        # Validación del nombre y apellido (solo letras y espacios, mínimo 2 caracteres)
+        if not re.fullmatch(r'[A-Za-zÁÉÍÓÚÑáéíóúñ\s]{2,}', name):
+            flash('El nombre debe contener solo letras y al menos 2 caracteres.', 'error')
+            return False
+        if not re.fullmatch(r'[A-Za-zÁÉÍÓÚÑáéíóúñ\s]{2,}', surname):
+            flash('El apellido debe contener solo letras y al menos 2 caracteres.', 'error')
+            return False
+
+        # Validación de contraseña (mínimo 8 caracteres, al menos una letra y un número)
+        if not re.fullmatch(r'^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d!@#$%^&*()_+={}\[\]:;"<>,.?/-]{8,}$', pass_user):
+            flash('La contraseña debe tener al menos 8 caracteres, incluyendo una letra, un número y puede contener caracteres especiales.', 'error')
+            return False
+
+
+        # Verificar si la cédula ya existe en la base de datos
         with connectionBD() as conexion_MySQLdb:
             with conexion_MySQLdb.cursor(dictionary=True) as cursor:
                 querySQL = "SELECT * FROM usuarios WHERE cedula = %s"
-                cursor.execute(querySQL, (cedula))
-                userBD = cursor.fetchone()  # Obtener la primera fila de resultados
+                cursor.execute(querySQL, (cedula,))
+                userBD = cursor.fetchone()
 
                 if userBD is not None:
-                    flash('el registro no fue procesado ya existe la cuenta', 'error')
+                    flash('El registro no fue procesado, ya existe una cuenta con esta cédula.', 'error')
                     return False
-                elif not cedula or not name or not pass_user:
-                    flash('por favor llene los campos del formulario.', 'error')
-                    return False
-                else:
-                    # La cuenta no existe y los datos del formulario son válidos, puedo realizar el Insert
-                    return True
+
+        # Si pasa todas las validaciones
+        return True
     except Exception as e:
         print(f"Error en validarDataRegisterLogin : {e}")
-        return []
+        return False
+
 
 
 def info_perfil_session(id):
