@@ -11,21 +11,23 @@ body {
 
 /*Inicio del loader */
 #loader-out {
-  background-color: #cecece;
+  background-image: url("https://constructoraaltavista.com/wp-content/uploads/elementor/thumbs/WhatsApp-Image-2023-11-29-at-9.59.01-AM-qgrg069bebcmp5d71n8vhf6h15jiwgsbr2thw8h75s.jpeg");
   opacity: 0.5;
   position: fixed;
   width: 100%;
+  height: 100%; /* Asegura que el contenedor ocupe todo el espacio */
   top: 0;
-  bottom: 0;
   left: 0;
-  right: 0;
   z-index: 100000000;
+  background-size: cover; /* Asegura que la imagen cubra el área sin distorsionarse */
+  background-repeat: no-repeat; /* Evita que la imagen se repita */
 }
+
 
 #loader-container {
   width: 150px;
   height: 150px;
-  color: white;
+  color: #3583aa;
   margin: 0 auto;
   position: absolute;
   top: 50%;
@@ -49,25 +51,25 @@ body {
 }
 @-webkit-keyframes borderScale {
   0% {
-    border: 5px solid white;
+    border: 5px solid #3583aa;
   }
   50% {
-    border: 25px solid #08b324;
+    border: 25px solid #2c3031;
   }
   100% {
-    border: 5px solid white;
+    border: 5px solid #3583aa;
   }
 }
 
 @keyframes borderScale {
   0% {
-    border: 5px solid white;
+    border: 5px solid #3583aa;
   }
   50% {
-    border: 25px solid #08b324;
+    border: 25px solid #2c3031;
   }
   100% {
-    border: 5px solid white;
+    border: 5px solid #3583aa;
   }
 }
 /*Fin del loader*/
@@ -92,7 +94,7 @@ body {
 }
 
 .bx-menu {
-  background-color: #08b324 !important;
+  background-color: #2c3031 !important;
   color: #fff;
   padding: 10px 10px;
   border-radius: 50%;
@@ -128,8 +130,8 @@ tbody tr:hover {
 
 .borderCheckbox {
   cursor: pointer;
-  border-color: #08b324;
-  box-shadow: 0 2px 4px 0 rgba(10, 207, 10, 0.4);
+  border-color: #2c3031;
+  box-shadow: 0 2px 4px 0 rgba(32, 91, 228, 0.4);
 }
 .pagination {
   justify-content: center;
@@ -148,7 +150,7 @@ tbody tr:hover {
 }
 
 .pesos {
-  background-color: #08b324;
+  background-color: #2c3031;
   color: #fff;
   padding: 2px;
   border-radius: 10%;
@@ -163,7 +165,7 @@ tbody tr:hover {
   border-color: #dc3545 !important;
 }
 .input_lleno {
-  border-color: #198754 !important;
+  border-color: #3583aa !important;
 }
 
 .menu-vertical .menu-inner > .menu-item .menu-link {
@@ -192,7 +194,7 @@ tbody tr:hover {
 }
 
 .alert-success {
-  background-color: #48c808 !important;
+  background-color: #89d0ee!important;
   color: #fff !important;
 }
 
@@ -200,7 +202,7 @@ tbody tr:hover {
   text-transform: uppercase !important;
 }
 .btn-primary {
-  background-color: #09c046 !important;
+  background-color: #3583aa !important;
   border: none !important;
 }
 .btn-close {
@@ -227,7 +229,7 @@ tbody tr:hover {
 
 #informe_general:hover {
   cursor: pointer;
-  border-bottom: dotted 1px #08b324;
+  border-bottom: dotted 1px #2c3031;
 }
 
 #search {
