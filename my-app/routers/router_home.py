@@ -225,22 +225,12 @@ def lista_tarjetas():
 def añadirTarjeta():
     if request.method == 'POST':
         card_name = request.form['nombre_tarjeta']  
-        departamento = request.form['departamento']
-        
-        resultado_insert = agregarTarjeta(card_name, departamento)
+        resultado_insert = agregarTarjeta(card_name,)
         if resultado_insert:
             flash('La tarjeta fue añadida correctamente', 'success')
             return redirect(url_for('lista_tarjetas'))
         else:
             return "Hubo un error al guardar la tarjeta."
-
-    # Obtener lista de departamentos
-    departamentos = obtenerDepartamentos()
-    
-    print("📢 Departamentos enviados al HTML:", departamentos)  
-    sys.stdout.flush()  # 🔹 Asegura que se imprima en la terminal
-
-    return render_template('public/usuarios/lista_tarjetas', departamentos=departamentos)
 
 
 @app.route('/borrar-tarjeta/<string:id_tarjeta>/', methods=['GET'])

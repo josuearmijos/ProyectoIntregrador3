@@ -17,23 +17,11 @@
               <label class="form-label">Añadir Tarjeta</label>
               <input type="text" name="nombre_tarjeta" id="nombre_tarjeta" class="form-control"
                   placeholder="Tarjeta UID" required />
-  
-              <label class="form-label mt-2">Seleccionar Departamento</label>
-              {% if departamentos %}
-              <select name="departamento" id="departamento" class="form-control" required>
-                {% for dep in departamentos %}
-                  <option value="{{ dep.id_departamento }}">{{ dep.nombre_departamento }}</option>
-                {% endfor %}
-              </select>
-            {% else %}
-              <p class="text-danger">No hay departamentos disponibles</p>
-            {% endif %}
-            
-              <div class="botones mt-3">
-                  <button id="botonGuardar" class="btn btn-outline-primary btn-sm" type="submit">
+                  <div class="botones mt-3">
+                    <button id="botonGuardar" class="btn btn-outline-primary btn-sm" type="submit">
                       Crear
-                  </button>
-              </div>
+                    </button>
+                  </div>
           </div>
       </form>
   </div>
@@ -52,7 +40,7 @@
             <tr>
               <th>ID</th>
               <th>UID</th>
-              <th>DEPARTAMENTO</th>
+              <th>Estado</th>
               <th>Acción</th>
             </tr>
           </thead>
@@ -61,13 +49,7 @@
             <tr id="{{ tarjeta.id_tarjeta }}">
               <td>{{ tarjeta.id_tarjeta }}</td>
               <td>{{ tarjeta.codigo_hexadecimal }}</td>
-              <td>
-                {% for departamento in departamentos %}
-                {% if departamento.id_departamento == tarjeta.id_departamento %}
-                  {{ departamento.nombre_departamento }}
-                {% endif %}
-              {% endfor %}              
-              </td>
+              <td>{{ tarjeta.estado_tarjeta}}</td>
 
               <td width="10px">
                 <a href="{{ url_for('borrarTarjeta', id_tarjeta=tarjeta.id_tarjeta) }}" class="btn btn-danger btn-sm"

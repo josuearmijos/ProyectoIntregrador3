@@ -280,7 +280,7 @@ def lista_tarjetasBD():
     try:
         with connectionBD() as conexion_MySQLdb:
             with conexion_MySQLdb.cursor(dictionary=True) as cursor:
-                querySQL = "SELECT id_tarjeta, codigo_hexadecimal, id_departamento FROM tarjetas_rfid"
+                querySQL = "SELECT id_tarjeta, codigo_hexadecimal, estado_tarjeta FROM tarjetas_rfid"
                 cursor.execute(querySQL,)
                 tarjetasBD = cursor.fetchall()
         return tarjetasBD
@@ -289,12 +289,12 @@ def lista_tarjetasBD():
         return []
    
 #añadir tarjeta
-def agregarTarjeta(card_name, departamento):
+def agregarTarjeta(card_name):
     try:
         with connectionBD() as conexion_MySQLdb:
             with conexion_MySQLdb.cursor(dictionary=True) as mycursor:
-                sql = "INSERT INTO tarjetas_rfid (codigo_hexadecimal, nombre_departamento) VALUES (%s, %s)"
-                valores = (card_name, departamento)
+                sql = "INSERT INTO tarjetas_rfid (codigo_hexadecimal) VALUES (%s)"
+                valores = (card_name,)
                 mycursor.execute(sql, valores)
                 conexion_MySQLdb.commit()
                 resultado_insert = mycursor.rowcount
@@ -319,24 +319,4 @@ def eliminarTarjeta(id):
         return []
     
 
-def obtenerDepartamentos():
-    try:
-        with connectionBD() as conexion_MySQLdb:
-            with conexion_MySQLdb.cursor(dictionary=True) as mycursor:
-                sql = "SELECT id_departamento, nombre_departamento FROM departamentos"
-                mycursor.execute(sql)
-                resultado = mycursor.fetchall()
-
-                print("🔍 Resultado de la consulta:", resultado)  
-                sys.stdout.flush()  # 🔹 Asegura que se imprima en la terminal
-
-                if not resultado:
-                    print("⚠️ No se encontraron departamentos en la BD.")
-                    sys.stdout.flush()
-
-                return resultado  
-    except Exception as e:
-        print(f"⚠️ Error al obtener departamentos: {e}")
-        sys.stdout.flush()
-        return []
     
