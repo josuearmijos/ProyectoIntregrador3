@@ -221,31 +221,37 @@ def lista_tarjetas():
         return redirect(url_for('inicio'))
 
 
-#CREAR Tarjeta
-@app.route('/añadir-tarjeta', methods=['GET','POST'])
+@app.route('/añadir-tarjeta', methods=['GET', 'POST'])
 def añadirTarjeta():
     if request.method == 'POST':
-        card_name = request.form['nombre_tarjeta']  # Asumiendo que 'nombre_area' es el nombre del campo en el formulario
-        resultado_insert = añadirTarjeta(card_name)
+        card_name = request.form['nombre_tarjeta']  
+        departamento = request.form['departamento']
+        
+        resultado_insert = agregarTarjeta(card_name, departamento)
         if resultado_insert:
-            # Éxito al guardar el área
             flash('La tarjeta fue añadida correctamente', 'success')
             return redirect(url_for('lista_tarjetas'))
-            
         else:
-            # Manejar error al guardar el área
             return "Hubo un error al guardar la tarjeta."
-    return render_template('public/usuarios/lista_tarjetas')
+
+    # Obtener lista de departamentos
+    departamentos = obtenerDepartamentos()
+    
+    print("📢 Departamentos enviados al HTML:", departamentos)  
+    sys.stdout.flush()  # 🔹 Asegura que se imprima en la terminal
+
+    return render_template('public/usuarios/lista_tarjetas', departamentos=departamentos)
+
 
 @app.route('/borrar-tarjeta/<string:id_tarjeta>/', methods=['GET'])
 def borrarTarjeta(id_tarjeta):
     resp = eliminarTarjeta(id_tarjeta)
-    if resp:
+    if resp > 0:  # Se cambia la condición para asegurar que solo muestra error si ocurre una falla real
         flash('La tarjeta fue eliminada correctamente', 'success')
-        return redirect(url_for('lista_tarjetas'))
     else:
-        flash('No se pudo eliminar la tarjeta.', 'error')
-        return redirect(url_for('lista_tarjetas'))
+        flash('No se encontró la tarjeta para eliminar.', 'error')
+    return redirect(url_for('lista_tarjetas'))
+
 
 
     
