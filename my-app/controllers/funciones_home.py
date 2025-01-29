@@ -1,6 +1,9 @@
 
 # Para subir archivo tipo foto al servidor
 from werkzeug.utils import secure_filename
+from app import app  # Asegúrate de importar la instancia de Flask correctamente
+from flask import jsonify
+
 import uuid  # Modulo de python para crear un string
 
 from conexion.conexionBD import connectionBD  # Conexión a BD
@@ -336,3 +339,4 @@ def obtenerDepartamentos():
         print(f"⚠️ Error al obtener departamentos: {e}")
         sys.stdout.flush()
         return []
+    
