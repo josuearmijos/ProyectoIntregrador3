@@ -47,24 +47,32 @@
 
   <hr />
 
-  <!-- Estado Actual de los Sensores -->
+  <!-- Tabla de Estados de Sensores -->
   <div class="row">
-    <h4 class="text-center mb-4">Estado Actual de los Sensores</h4>
-
-    <div class="col-12 text-center">
-      <div class="row">
-        {% for sensor in sensores %}
-          <div class="col-md-3 mb-3">
-            <div class="sensor-status" style="background-color: {% if sensor.valor_actual < 20 %} #28a745 {% elif sensor.valor_actual > 25 %} #dc3545 {% else %} #ffc107 {% endif %};">
-              <div class="sensor-circle">
-                <span class="sensor-value">{{ sensor.valor_actual }}</span>
-              </div>
-              <h5 class="sensor-description">{{ sensor.tipo_sensor }}</h5>
-              <p>{{ sensor.nombre_departamento }}</p>
-            </div>
-          </div>
-        {% endfor %}
-      </div>
+    <div class="table-responsive text-nowrap">
+      <h4 class="text-center">Estado Actual de los Sensores</h4>
+      <table class="table table-hover">
+        <thead>
+          <tr style="background-color: #f7f7f7">
+            <th>ID del Sensor</th>
+            <th>Tipo de Sensor</th>
+            <th>Departamento</th>
+            <th>Valor Actual</th>
+            <th>Descripción</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for sensor in sensores %}
+          <tr>
+            <td>{{ sensor.id_sensor }}</td>
+            <td>{{ sensor.tipo_sensor }}</td>
+            <td>{{ sensor.nombre_departamento }}</td>
+            <td>{{ sensor.valor_actual }}</td>
+            <td>{{ sensor.descripcion }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
     </div>
   </div>
 
@@ -122,3 +130,4 @@
 </script>
 
 {% endblock %}
+
