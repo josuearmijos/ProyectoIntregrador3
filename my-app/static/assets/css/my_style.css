@@ -6,11 +6,67 @@ body.auth-login-page {
   color: white; /* Si quieres que el texto sea legible en negro */
 }
 .custom-card {
-  background-color: #2b3657; /* Fondo azul personalizado */
-  border-radius: 10px; /* Opcional: bordes redondeados */
-  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Opcional: sombra sutil */
-  color: white; /* Texto blanco para contraste */
+  background-color: white; /* Mantener fondo blanco */
+  border: 3px solid; /* Definir ancho del borde */
+  border-image-source: linear-gradient(90deg, red, green, blue); /* Colores del borde */
+  border-image-slice: 1; /* Necesario para bordes con gradiente */
+  border-radius: 10px; /* Bordes redondeados opcionales */
+  animation: border-animation 3s infinite; /* Animación */
 }
+
+@keyframes border-animation {
+  0% {
+      border-image-source: linear-gradient(90deg, red, green, blue);
+  }
+  50% {
+      border-image-source: linear-gradient(90deg, green, blue, red);
+  }
+  100% {
+      border-image-source: linear-gradient(90deg, blue, red, green);
+  }
+}
+
+/* diseño de la interfaz*/
+.layout-menu {
+  background: linear-gradient(180deg, #3a475e, #4b5d73); /* Degradado azul-gris */
+  color: white;
+  border-right: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+
+.layout-menu .menu-icon {
+  color: #67d5b5; /* Turquesa */
+  font-size: 1.5rem;
+  margin-right: 10px;
+}
+
+.layout-menu .menu-link {
+  color: white;
+  padding: 10px 20px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+}
+
+.layout-menu .menu-link:hover {
+  background: rgba(103, 213, 181, 0.2); /* Fondo turquesa suave */
+  color: #67d5b5;
+  text-decoration: none;
+}
+
+.layout-menu .menu-item.active .menu-link {
+  background: rgba(103, 213, 181, 0.3); /* Fondo turquesa claro */
+  color: #67d5b5;
+  border-left: 4px solid #67d5b5;
+}
+
+.app-brand img {
+  background: linear-gradient(180deg, #3a475e, #4b5d73); /* Igual que el menú */
+  border-radius: 10px;
+  padding: 10px;
+}
+
+
 
 .custom-bg {
     background-image: url('/static/img/bg1.jpeg');
