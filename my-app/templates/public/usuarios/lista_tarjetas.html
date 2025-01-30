@@ -52,6 +52,12 @@
               <td>{{ tarjeta.estado_tarjeta}}</td>
 
               <td width="10px">
+                <a href="{{ url_for('cambiarEstadoTarjeta', id_tarjeta=tarjeta.id_tarjeta) }}" class="btn btn-warning btn-sm"
+                  data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="top" data-bs-html="true"
+                  title="<span>Cambiar estado de tarjeta {{ tarjeta.codigo_hexadecimal }}</span>">
+                  <i class="bi bi-arrow-repeat"></i>
+                  Cambiar Estado
+                </a>
                 <a href="{{ url_for('borrarTarjeta', id_tarjeta=tarjeta.id_tarjeta) }}" class="btn btn-danger btn-sm"
                   data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="top" data-bs-html="true"
                   title="<span>Eliminar tarjeta {{ tarjeta.codigo_hexadecimal }}</span>">
