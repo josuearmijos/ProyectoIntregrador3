@@ -1,7 +1,27 @@
 body {
   font-family: "Open Sans", sans-serif;
 }
+body.auth-login-page {
+  background-color: black;
+  color: white; /* Si quieres que el texto sea legible en negro */
+}
+.custom-card {
+  background-color: #2b3657; /* Fondo azul personalizado */
+  border-radius: 10px; /* Opcional: bordes redondeados */
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Opcional: sombra sutil */
+  color: white; /* Texto blanco para contraste */
+}
 
+.custom-bg {
+    background-image: url('/static/img/bg1.jpeg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 .gj-datepicker-bootstrap [role="right-icon"] button {
   border: none !important;
 }
