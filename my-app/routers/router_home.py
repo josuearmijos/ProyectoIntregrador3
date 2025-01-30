@@ -243,5 +243,9 @@ def borrarTarjeta(id_tarjeta):
     return redirect(url_for('lista_tarjetas'))
 
 
-
-    
+@app.route('/cambiar-estado-tarjeta/<int:id_tarjeta>', methods=['GET'])
+def cambiarEstadoTarjeta(id_tarjeta):
+    if cambiar_estado_tarjeta(id_tarjeta):
+        return redirect(url_for('lista_tarjetas'))
+    else:
+        return "Error al cambiar el estado de la tarjeta", 500

@@ -318,5 +318,24 @@ def eliminarTarjeta(id):
         print(f"Error en eliminarTarjeta : {e}")
         return []
     
+def cambiar_estado_tarjeta(id):
+    try:
+        # Conexión con la base de datos
+        with connectionBD() as conexion_MySQLdb:
+            with conexion_MySQLdb.cursor(dictionary=True) as cursor:
+                querySQL = "SELECT estado_tarjeta FROM tarjetas_rfid WHERE id_tarjeta=%s"
+                cursor.execute(querySQL, (id,))
+                tarjeta = cursor.fetchone()              
+                if tarjeta:
+                    nuevo_estado = 'Inactiva' if tarjeta['estado_tarjeta'] == 'Activa' else 'Activa'
+                    querySQL_update = "UPDATE tarjetas_rfid SET estado_tarjeta=%s WHERE id_tarjeta=%s"
+                    cursor.execute(querySQL_update, (nuevo_estado, id))
+                    conexion_MySQLdb.commit()
+                    return True  # Indica que la operación fue exitosa
+                else:
+                    return False  # La tarjeta no se encontró
+    except Exception as e:
+        print(f"Error en cambiar_estado_tarjeta : {e}")
+        return False  # En caso de error, retornamos False
 
     
