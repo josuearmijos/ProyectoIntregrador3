@@ -1,0 +1,48 @@
+{% extends 'public/base_cpanel.html' %}
+
+{% block title %}Historial de Sensores{% endblock %}
+
+{% block body %}
+<div class="card">
+  <div class="row">
+    <div class="col-md-12 mb-4">
+      <h3 class="text-center mt-5 mb-3">Historial de Sensores</h3>
+      <hr />
+    </div>
+  </div>
+
+  <!-- Tabla de Registros de Sensores -->
+  <div class="row mt-4">
+    <div class="table-responsive text-nowrap">
+      <h4 class="text-center">Registros de Sensores</h4>
+      <table class="table table-hover" id="tabla-registros">
+        <thead>
+          <tr style="background-color: #ddd">
+            <th>Departamento</th>
+            <th>Sensor</th>
+            <th>Valor</th>
+            <th>Descripción</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% if historial_sensores %}
+            {% for registro in historial_sensores %}
+              <tr>
+                <td>{{ registro.nombre_departamento }}</td>
+                <td>{{ registro.nombre_sensor }}</td>
+                <td>{{ registro.valor }}</td>
+                <td>{{ registro.descripcion }}</td>
+              </tr>
+            {% endfor %}
+          {% else %}
+            <tr>
+              <td colspan="4" class="text-center">No hay registros disponibles.</td>
+            </tr>
+          {% endif %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

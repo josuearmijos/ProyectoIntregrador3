@@ -36,6 +36,13 @@
         <div data-i18n="Tables">Historial de accesos</div>
       </a>
     </li>
+    <li class="menu-item {% if request.path == '/historial-sensores' %} active{% endif %}">
+      <a href="{{ url_for('historial_sensores') }}" class="menu-link">
+        <i class="menu-icon bi bi-device-ssd"></i>
+        <div data-i18n="Tables">Historial de Sensores</div>
+      </a>
+    </li>
+    
     {% if dataLogin.rol == 1 %}
     <li class="menu-item has-sub">
       <a href="javascript:void(0);" class="menu-link menu-toggle">

@@ -242,10 +242,18 @@ def borrarTarjeta(id_tarjeta):
         flash('No se encontró la tarjeta para eliminar.', 'error')
     return redirect(url_for('lista_tarjetas'))
 
-
+#Activa inactiva tarjeta
 @app.route('/cambiar-estado-tarjeta/<int:id_tarjeta>', methods=['GET'])
 def cambiarEstadoTarjeta(id_tarjeta):
     if cambiar_estado_tarjeta(id_tarjeta):
         return redirect(url_for('lista_tarjetas'))
     else:
         return "Error al cambiar el estado de la tarjeta", 500
+
+@app.route('/historial-sensores', methods=['GET'])
+def historial_sensores():
+    if 'conectado' in session:
+        return render_template('public/usuarios/historial_sensores.html', historial_sensores=obtener_registros_sensores(), dataLogin=dataLoginSesion())
+    else:
+        flash('primero debes iniciar sesión.', 'error')
+        return redirect(url_for('inicio'))

@@ -339,3 +339,31 @@ def cambiar_estado_tarjeta(id):
         return False  # En caso de error, retornamos False
 
     
+#Historial sensores SELECT
+def obtener_registros_sensores():
+    try:
+        # Conexión con la base de datos
+        with connectionBD() as conexion_MySQLdb:
+            with conexion_MySQLdb.cursor(dictionary=True) as cursor:
+                # Consulta SQL
+                querySQL = """
+                SELECT 
+                    d.nombre_departamento,
+                    s.descripcion AS nombre_sensor,
+                    h.valor,
+                    h.descripcion
+                FROM historial_sensores h
+                JOIN sensores s ON h.id_sensor = s.id_sensor
+                JOIN departamentos d ON s.id_departamento = d.id_departamento;
+                """
+                cursor.execute(querySQL)
+                registros = cursor.fetchall()
+                
+                if registros:
+                    return registros  
+                else:
+                    return None 
+    except Exception as e:
+        print(f"Error en obtener_registros_sensores: {e}")
+        return None  
+
