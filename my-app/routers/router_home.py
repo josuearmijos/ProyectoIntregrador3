@@ -33,6 +33,8 @@ def departamentos():
         print(f"Error: {e}")
         return render_template('public/usuarios/departamentos.html', departamentos=[], dataLogin={})
 
+
+
 @app.route('/crear-departamento', methods=['GET', 'POST'])
 def crear_departamento():
     if request.method == 'POST':
@@ -124,6 +126,24 @@ def eliminar_departamento(id_departamento):
         print(f"Error al eliminar el departamento: {e}")
         return jsonify({'success': False})
 
+@app.route('/obtener-departamentos', methods=['GET'])
+def obtener_departamentos():
+    try:
+        # Conectar a la base de datos
+        conexion = connectionBD()
+        with conexion.cursor(dictionary=True) as cursor:
+            # Consulta para obtener los departamentos
+            query = "SELECT id_departamento, nombre_departamento, id_propietario FROM departamentos"
+            cursor.execute(query)
+            departamentos = cursor.fetchall()
+
+        conexion.close()
+
+        # Devuelve los departamentos como JSON
+        return {"departamentos": departamentos}, 200
+    except Exception as e:
+        print(f"Error al obtener los departamentos: {e}")
+        return {"error": "No se pudieron obtener los departamentos"}, 500
 
 
 

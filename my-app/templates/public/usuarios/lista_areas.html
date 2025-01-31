@@ -1,7 +1,7 @@
 {% extends 'public/base_cpanel.html' %}
-<!--Cambiando el title-->
+<!-- Cambiando el título -->
 {% block title %}Crud con Python 🐍 | Lista de Áreas{% endblock %}
-<!--Inicio del block-->
+<!-- Inicio del bloque -->
 {% block body %}
 
 <div class="card" style="border-radius: 0px !important">
@@ -10,51 +10,37 @@
       <h3 class="text-center mt-5 mb-3">LISTA DE ÁREAS</h3>
       <hr />
     </div>
-    <!--CAMPO PARA CREAR AREAS-->
+    <!-- Campo para crear áreas -->
     <div class="container" id="formCrear">
       <form action="/crear-area" method="POST">
         <div class="contenedor">
           <label class="form-label"> Crear Área </label>
           <div class="campo_clave">
-            <!-- Asegúrate de que el atributo name coincida con el nombre del campo en la función de Flask -->
             <input type="text" name="nombre_area" id="nombreSeleccionado" class="form-control"
               placeholder="Nombre seleccionado" />
             <div class="botones mt-3">
-              <button id="botonGuardar" class="btn btn-outline-primary btn-sm" type="submit">
-                <!-- Cambia el tipo de botón a 'submit' para enviar el formulario -->
-                Crear
-              </button>
+              <button id="botonGuardar" class="btn btn-outline-primary btn-sm" type="submit">Crear</button>
             </div>
           </div>
         </div>
       </form>
     </div>
-    
 
     <div class="container" id="formActualizar" style="display: none;">
       <form action="{{ url_for('updateArea') }}" method="POST">
         <div class="contenedor">
           <label class="form-label">Actualizar Área</label>
           <input class="form-control" name="nombre_area" id="inputArea">
-          <input name="id_area" hidden id="inputId"> 
+          <input name="id_area" hidden id="inputId">
         </div>
         <div class="mt-3">
-          <button id="botonGuardar" class="btn btn-outline-primary btn-sm" type="submit">
-            <!-- Cambia el tipo de botón a 'submit' para enviar el formulario -->
-            Actualizar
-          </button>
-          <button class="btn btn-outline-danger btn-sm" onclick="ocultarForm()" type="button">
-            <!-- Cambia el tipo de botón a 'submit' para enviar el formulario -->
-            Cancelar
-          </button>
+          <button id="botonGuardar" class="btn btn-outline-primary btn-sm" type="submit">Actualizar</button>
+          <button class="btn btn-outline-danger btn-sm" onclick="ocultarForm()" type="button">Cancelar</button>
         </div>
-        
       </form>
     </div>
 
-
-
-
+    <!-- Buscador de áreas -->
     <div class="row justify-content-end">
       <div class="col-md-6 mt-4 py-2">
         <input type="search" id="search" class="form-control border-0 shadow-none" placeholder="Buscar área..."
@@ -62,9 +48,10 @@
       </div>
     </div>
 
+    <!-- Tabla de Áreas -->
     <div class="row justify-content-center mb-2">
       <div class="table-responsive text-nowrap table-hover">
-        <table table-hover id="tbl_areas" class="table table-striped table-bordered" cellspacing="0" width="100%">
+        <table id="tbl_areas" class="table table-striped table-bordered" cellspacing="0" width="100%">
           <thead>
             <tr>
               <th>ID</th>
@@ -77,17 +64,13 @@
             <tr id="{{ area.id_area }}">
               <td>{{ area.id_area }}</td>
               <td>{{ area.nombre_area }}</td>
-
               <td width="10px">
-                <a onclick="editar('{{area.nombre_area}}', '{{area.id_area}}')" class="btn btn-success btn-sm" tooltip="Actualizar Registro">
-                  <i class="bi bi-arrow-clockwise"></i>
-                  Actualizar
+                <a onclick="editar('{{area.nombre_area}}', '{{area.id_area}}')" class="btn btn-success btn-sm">
+                  <i class="bi bi-arrow-clockwise"></i> Actualizar
                 </a>
-                <a href="{{ url_for('borrarArea', id_area = area.id_area) }}" class="btn btn-danger btn-sm"
-                  data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="top" data-bs-html="true"
-                  title="<span>Eliminar área {{ area.nombre_area }}</span>">
-                  <i class="bi bi-trash3"></i>
-                  Eliminar
+                <a href="{{ url_for('borrarArea', id_area=area.id_area) }}" class="btn btn-danger btn-sm"
+                  title="Eliminar área {{ area.nombre_area }}">
+                  <i class="bi bi-trash3"></i> Eliminar
                 </a>
               </td>
             </tr>
@@ -97,43 +80,84 @@
       </div>
     </div>
   </div>
+
+  <!-- Sección de Departamentos -->
+  <div class="row justify-content-center mb-2">
+    <div class="col-md-12 mb-4">
+      <h3 class="text-center mt-5 mb-3">Lista de Departamentos</h3>
+      <hr />
+    </div>
+    <div class="container">
+      <div class="row justify-content-end">
+        <div class="col-md-6">
+          <input type="search" id="search-departamentos" class="form-control" placeholder="Buscar departamento..." />
+        </div>
+      </div>
+      <div class="table-responsive text-nowrap mt-3">
+        <table id="tbl_departamentos" class="table table-hover table-striped">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Nombre del Departamento</th>
+              <th>ID del Propietario</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Este tbody será manipulado dinámicamente -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
 </div>
 
-{% endblock %} {% block customJS %}
+{% endblock %}
+{% block customJS %}
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-
-  function ocultarForm(nombre_area) {
-    var x = document.getElementById("formActualizar");
-    var y = document.getElementById("formCrear");
-    if (x.style.display === "none") {
-      x.style.display = "block";
-      y.style.display = "none"
-    } else {
-      x.style.display = "none";
-      y.style.display = "block"
-    }
-
+  function ocultarForm() {
+    var formActualizar = document.getElementById("formActualizar");
+    var formCrear = document.getElementById("formCrear");
+    formActualizar.style.display = formActualizar.style.display === "none" ? "block" : "none";
+    formCrear.style.display = formCrear.style.display === "none" ? "block" : "none";
   }
 
   function editar(nombre_area, id_area) {
-    var formEditar = document.getElementById("formActualizar")
+    var formActualizar = document.getElementById("formActualizar");
     var formCrear = document.getElementById("formCrear");
-    var area = document.getElementById("inputArea")
-    var id = document.getElementById("inputId")
-
-    if(formEditar.style.display === "none"){
-      formEditar.style.display = "block";
-      area.value = nombre_area
-      id.value = id_area
-      formCrear.style.display = "none"
-    } else {
-      area.value = nombre_area
-      id.value = id_area
-    }
-    
+    document.getElementById("inputArea").value = nombre_area;
+    document.getElementById("inputId").value = id_area;
+    formActualizar.style.display = "block";
+    formCrear.style.display = "none";
   }
 
+  // Cargar departamentos dinámicamente
+  document.addEventListener("DOMContentLoaded", function () {
+    fetch('/obtener-departamentos')
+      .then(response => response.json())
+      .then(data => {
+        if (data.departamentos) {
+          const tbody = document.querySelector('#tbl_departamentos tbody');
+          tbody.innerHTML = ''; // Limpia el contenido actual
+          data.departamentos.forEach(departamento => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+              <td>${departamento.id_departamento}</td>
+              <td>${departamento.nombre_departamento}</td>
+              <td>${departamento.id_propietario}</td>
+              <td>
+                <a href="/editar-departamento/${departamento.id_departamento}" class="btn btn-warning btn-sm">Editar</a>
+                <a href="/eliminar-departamento/${departamento.id_departamento}" class="btn btn-danger btn-sm">Eliminar</a>
+              </td>
+            `;
+            tbody.appendChild(row);
+          });
+        } else {
+          console.error("No se encontraron departamentos.");
+        }
+      })
+      .catch(error => console.error("Error al cargar los departamentos:", error));
+  });
 </script>
-
 {% endblock %}
