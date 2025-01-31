@@ -35,33 +35,28 @@ def departamentos():
 
 
 
-@app.route('/crear-departamento', methods=['GET', 'POST'])
+@app.route('/crear-departamento', methods=['POST'])
 def crear_departamento():
-    if request.method == 'POST':
-        # Recibir datos del formulario
-        nombre_departamento = request.form.get('name')
-        id_propietario = request.form.get('id_propietario')
+    try:
+        # Capturar datos del formulario
+        nombre_departamento = request.form['nombre_departamento']
 
-        try:
-            # Conectar a la base de datos
-            conexion = connectionBD()
-            with conexion.cursor() as cursor:
-                # Insertar datos en la tabla
-                query = "INSERT INTO departamentos (nombre_departamento, id_propietario) VALUES (%s, %s)"
-                cursor.execute(query, (nombre_departamento, id_propietario))
-                conexion.commit()
+        # Conexión a la base de datos
+        conexion = connectionBD()
+        with conexion.cursor() as cursor:
+            # Insertar el nuevo departamento
+            query = "INSERT INTO departamentos (nombre_departamento) VALUES (%s)"
+            cursor.execute(query, (nombre_departamento,))
+        conexion.commit()
+        conexion.close()
 
-            conexion.close()
-            flash('Departamento creado correctamente.', 'success')
-            return redirect(url_for('departamentos'))
-        except Exception as e:
-            print(f"Error al crear el departamento: {e}")
-            flash('Hubo un error al crear el departamento.', 'error')
-            return redirect(url_for('crear_departamento'))
+        flash("Departamento creado exitosamente.", "success")
+        return redirect('/lista-areas')
+    except Exception as e:
+        print(f"Error al crear el departamento: {e}")
+        flash("Error al crear el departamento.", "danger")
+        return redirect('/lista-areas')
 
-    # Simulación de sesión
-    dataLogin = {'id': 1, 'rol': 1, 'cedula': '1234567890'}
-    return render_template('public/usuarios/departamentos_crear.html', dataLogin=dataLogin)
 
 
 @app.route('/editar-departamento/<int:id_departamento>', methods=['GET', 'POST'])
