@@ -228,7 +228,13 @@ def reporteBD():
 def reporteAccesos():
     if 'conectado' in session:
         userData = dataLoginSesion()
-        return render_template('public/perfil/reportes.html',  reportes=dataReportes(),lastAccess=lastAccessBD(userData.get('cedula')), dataLogin=dataLoginSesion())
+        return render_template('public/perfil/reportes.html',
+                               reportes=dataReportesPorUsuario(userData.get('id')),
+                               lastAccess=lastAccessBD(userData.get('cedula')),
+                               dataLogin=userData)
+    else:
+        flash('Debe iniciar sesión para ver esta página.', 'error')
+        return redirect(url_for('inicio'))
 
 @app.route("/interfaz-clave", methods=['GET','POST'])
 def claves():

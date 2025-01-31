@@ -197,6 +197,24 @@ def dataReportes():
     except Exception as e:
         print(f"Error en listaAccesos : {e}")
         return []
+def dataReportesPorUsuario(id_usuario):
+    try:
+        with connectionBD() as conexion_MYSQLdb:
+            with conexion_MYSQLdb.cursor(dictionary=True) as cursor:
+                querySQL = """
+                SELECT a.id_acceso, u.cedula, a.fecha, r.nombre_area, a.clave 
+                FROM accesos a 
+                JOIN usuarios u ON u.id_usuario = a.id_usuario
+                JOIN area r ON u.id_area = r.id_area
+                WHERE u.id_usuario = %s
+                ORDER BY a.fecha DESC
+                """
+                cursor.execute(querySQL, (id_usuario,))
+                reportes = cursor.fetchall()
+        return reportes
+    except Exception as e:
+        print(f"Error en listaAccesos : {e}")
+        return []
 
 def lastAccessBD(id):
     try:

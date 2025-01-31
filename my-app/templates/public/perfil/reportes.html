@@ -45,7 +45,7 @@
           </tr>
         </thead>
         <tbody>
-          {% for reporte in reportes %}
+          {% for reporte in reportes|sort(attribute="id_acceso") %}
           {% if dataLogin.rol == 2 %}
           {% if reporte.cedula == dataLogin.cedula %}
           <tr>
@@ -67,6 +67,7 @@
           {% endif %}
           {% endfor %}
         </tbody>
+        
       </table>
     </div>
   </div>

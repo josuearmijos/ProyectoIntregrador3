@@ -123,7 +123,7 @@ def loginCliente():
                     session['id'] = account['id_usuario']
                     session['name'] = account['nombre_usuario']
                     session['cedula'] = account['cedula']
-                    session['rol'] = account['id_rol']
+                    session['rol'] = account['id_rol'] if 'id_rol' in account else 0
 
                     flash('la sesión fue correcta.', 'success')
                     return redirect(url_for('inicio'))

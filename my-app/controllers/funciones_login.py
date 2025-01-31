@@ -204,10 +204,10 @@ def updatePefilSinPass(id_user, nombre_usuario, apellido_usuario, id_area, id_ro
 
 
 def dataLoginSesion():
-    inforLogin = {
-        "id": session['id'],
-        "name": session['name'],
-        "cedula": session['cedula'],
-        "rol": session['rol']
+    return {
+        "id": session.get('id'),
+        "name": session.get('name'),
+        "cedula": session.get('cedula'),
+        "rol": session.get('rol', 0)  # Valor predeterminado 0 para evitar errores
     }
     return inforLogin
