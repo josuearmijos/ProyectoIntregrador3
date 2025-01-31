@@ -145,6 +145,53 @@ def obtener_departamentos():
         print(f"Error al obtener los departamentos: {e}")
         return {"error": "No se pudieron obtener los departamentos"}, 500
 
+# ruta para accesos xdxd
+@app.route('/reporte-accesos', methods=['GET'])
+def reporte_accesos():
+    try:
+        conexion = connectionBD()
+        with conexion.cursor(dictionary=True) as cursor:
+            # Consulta para obtener todos los accesos
+            query = """
+            SELECT 
+                a.id_acceso, 
+                u.cedula, 
+                a.fecha, 
+                t.codigo_hexadecimal AS clave
+            FROM 
+                Domus.accesos a
+            INNER JOIN 
+                Domus.usuarios u ON a.id_usuario = u.id_usuario
+            INNER JOIN 
+                Domus.tarjetas_rfid t ON a.id_tarjeta = t.id_tarjeta
+            """
+            cursor.execute(query)
+            reportes = cursor.fetchall()
+
+            # Consulta para obtener el último acceso
+            query_last_access = """
+            SELECT 
+                a.fecha, 
+                t.codigo_hexadecimal AS clave
+            FROM 
+                Domus.accesos a
+            INNER JOIN 
+                Domus.tarjetas_rfid t ON a.id_tarjeta = t.id_tarjeta
+            ORDER BY a.fecha DESC
+            LIMIT 1
+            """
+            cursor.execute(query_last_access)
+            lastAccess = cursor.fetchone()
+        
+        conexion.close()
+
+        # Simulación de sesión
+        dataLogin = {'id': 1, 'rol': 1, 'cedula': '1234567890'}
+
+        return render_template('public/perfil/reportes.html', reportes=reportes, lastAccess=lastAccess, dataLogin=dataLogin)
+    except Exception as e:
+        print(f"Error al obtener el reporte: {e}")
+        return render_template('public/perfil/reportes.html', reportes=[], lastAccess={}, dataLogin={})
 
 
 @app.route("/lista-de-usuarios", methods=['GET'])
