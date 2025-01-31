@@ -259,7 +259,23 @@ def guardarArea(area_name):
         
     except Exception as e:
         return f'Se produjo un error en crear Area: {str(e)}' 
-    
+
+##CREAR DEPARTAMENTO 
+def guardarDepartamento(departamento_name, id_propietario):
+    try:
+        with connectionBD() as conexion_MySQLdb:
+            with conexion_MySQLdb.cursor(dictionary=True) as mycursor:
+                sql = "INSERT INTO departamento (nombre_departamento, id_propietario) VALUES (%s, %s)"
+                valores = (departamento_name, id_propietario)
+                mycursor.execute(sql, valores)
+                conexion_MySQLdb.commit()
+                resultado_insert = mycursor.rowcount
+                return resultado_insert 
+        
+    except Exception as e:
+        return f'Se produjo un error en crear Departamento: {str(e)}'
+
+  
 ##ACTUALIZAR AREA
 def actualizarArea(area_id, area_name):
     try:
