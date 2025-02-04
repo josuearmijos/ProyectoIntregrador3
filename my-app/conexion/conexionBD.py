@@ -11,7 +11,7 @@ def connectionBD():
             host="35.224.172.30",
                 #host="viaduct.proxy.rlwy.net",
             port=3306,
-            user="root",
+            user="prueba",
             passwd="GrupoProyecto1!",
                 #passwd="-D2eD6aDb5Bg6dEbhAAeBB6gd3EheaBg",
             database="Domus",
