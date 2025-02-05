@@ -162,8 +162,6 @@ def reporte_accesos():
             """
             cursor.execute(query)
             reportes = cursor.fetchall()
-
-            # Consulta para obtener el último acceso
             query_last_access = """
             SELECT 
                 a.fecha, 
