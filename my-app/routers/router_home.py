@@ -57,6 +57,52 @@ def crear_departamento():
         flash("Error al crear el departamento.", "danger")
         return redirect('/lista-areas')
 
+# Ruta para el control de luces
+@app.route('/control_luces', methods=['GET', 'POST'])
+def control_luces():
+    try:
+        conexion = connectionBD()
+        
+        # Simulación de sesión
+        dataLogin = {'id': 1, 'rol': 1, 'cedula': '1234567890'}
+
+        if request.method == 'POST':
+            # Obtener datos del formulario
+            departamento_id = request.form.get('departamento')
+            color = request.form.get('color')
+
+            # Actualizar color en la base de datos para el departamento del propietario
+            with conexion.cursor(dictionary=True) as cursor:
+                query = """
+                UPDATE configuracion_luces
+                SET color = %s
+                WHERE id_departamento = %s AND id_departamento IN (
+                    SELECT id_departamento
+                    FROM departamentos
+                    WHERE id_propietario = %s
+                )
+                """
+                cursor.execute(query, (color, departamento_id, dataLogin['id']))
+                conexion.commit()
+
+        # Obtener departamentos del usuario propietario
+        with conexion.cursor(dictionary=True) as cursor:
+            query = """
+            SELECT d.id_departamento, d.nombre_departamento, cl.color
+            FROM departamentos d
+            LEFT JOIN configuracion_luces cl ON d.id_departamento = cl.id_departamento
+            WHERE d.id_propietario = %s
+            """
+            cursor.execute(query, (dataLogin['id'],))
+            departamentos = cursor.fetchall()
+
+        conexion.close()
+
+        return render_template('public/usuarios/control_luces.html', departamentos=departamentos, dataLogin=dataLogin)
+    except Exception as e:
+        print(f"Error: {e}")
+        return render_template('public/usuarios/control_luces.html', departamentos=[], dataLogin={})
+
 
 
 @app.route('/editar-departamento/<int:id_departamento>', methods=['GET', 'POST'])
