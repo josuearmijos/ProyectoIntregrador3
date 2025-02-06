@@ -251,6 +251,25 @@ def guardarClaveAuditoria(clave_audi,id):
         
     except Exception as e:
         return f'Se produjo un error en crear Clave: {str(e)}'
+    
+
+def obtenerUsuarioPorId(id):
+    connection = connectionBD()
+    cursor = connection.cursor(dictionary=True)
+    query = "SELECT * FROM usuarios WHERE id_usuario = %s"  # Cambié 'id' por 'id_usuario'
+    cursor.execute(query, (id,))
+    usuario = cursor.fetchone()
+    connection.close()
+    return usuario
+
+def actualizarClaveUsuario(id, nueva_clave_hashed):
+    connection = connectionBD()
+    cursor = connection.cursor()
+    query = "UPDATE usuarios SET password = %s WHERE id_usuario = %s"  # Cambié 'id' por 'id_usuario'
+    cursor.execute(query, (nueva_clave_hashed, id))
+    connection.commit()
+    connection.close()
+
  #funciones area
 def editarArea(id, nuevo_nombre):
     try:

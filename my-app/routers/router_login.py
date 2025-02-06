@@ -22,13 +22,20 @@ def inicio():
         return render_template(f'{PATH_URL_LOGIN}/base_login.html')
 
 
-@app.route('/mi-perfil/<string:id>', methods=['GET'])
+@app.route('/mi-perfil/<int:id>', methods=['GET'])
 def perfil(id):
     if 'conectado' in session:
-        
-        return render_template(f'public/perfil/perfil.html', info_perfil_session=info_perfil_session(id), dataLogin=dataLoginSesion(), areas=lista_areasBD(), roles=lista_rolesBD())
+        usuario = info_perfil_session(id)
+        print("Datos del usuario:", usuario)  # Verificar los datos
+        return render_template(
+            'public/perfil/perfil.html',
+            info_perfil_session=usuario,
+            dataLogin=dataLoginSesion(),
+            areas=lista_areasBD(),
+            roles=lista_rolesBD()
+        )
     else:
-        return redirect(url_for('inicio'))
+        return redirect(url_for('login'))
 
 
 # Crear cuenta de usuario
@@ -70,33 +77,37 @@ def cpanelRegisterUserBD():
 
 
 # Actualizar datos de mi perfil
-@app.route("/actualizar-datos-perfil/<int:id>", methods=['POST'])
+@app.route('/actualizarPerfil/<int:id>', methods=['POST'])
 def actualizarPerfil(id):
-    if request.method == 'POST':
-        if 'conectado' in session:
-            respuesta = procesar_update_perfil(request.form,id)
-            if respuesta == 1:
-                flash('Los datos fuerón actualizados correctamente.', 'success')
-                return redirect(url_for('inicio'))
-            elif respuesta == 0:
-                flash(
-                    'La contraseña actual esta incorrecta, por favor verifique.', 'error')
-                return redirect(url_for('perfil',id=id))
-            elif respuesta == 2:
-                flash('Ambas claves deben se igual, por favor verifique.', 'error')
-                return redirect(url_for('perfil',id=id))
-            elif respuesta == 3:
-                flash('La Clave actual es obligatoria.', 'error')
-                return redirect(url_for('perfil',id=id))
-            else: 
-                flash('Clave actual incorrecta', 'error')
-                return redirect(url_for('perfil',id=id))
-        else:
-            flash('primero debes iniciar sesión.', 'error')
-            return redirect(url_for('inicio'))
-    else:
-        flash('primero debes iniciar sesión.', 'error')
-        return redirect(url_for('inicio'))
+    if 'conectado' not in session:
+        flash('Debes iniciar sesión para realizar esta acción', 'error')
+        return redirect(url_for('login'))
+
+    # Obtener el usuario por ID
+    usuario = obtenerUsuarioPorId(id)
+    if not usuario:
+        flash('Usuario no encontrado', 'error')
+        return redirect(url_for('perfil', id=id))
+
+    # Validar la clave actual
+    clave_actual = request.form.get('pass_actual')
+    if not clave_actual or not usuario.get('password'):
+        flash('Clave actual no proporcionada o no encontrada', 'error')
+        return redirect(url_for('perfil', id=id))
+
+    if not check_password_hash(usuario['password'], clave_actual):
+        flash('La clave actual es incorrecta', 'error')
+        return redirect(url_for('perfil', id=id))
+
+    # Actualizar la nueva clave si se proporciona
+    nueva_clave = request.form.get('new_pass_user')
+    if nueva_clave:
+        nueva_clave_hashed = generate_password_hash(nueva_clave)
+        actualizarClaveUsuario(id, nueva_clave_hashed)
+
+    flash('Perfil actualizado con éxito', 'success')
+    return redirect(url_for('perfil', id=id))
+
 
 
 # Validar sesión
