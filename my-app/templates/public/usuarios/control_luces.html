@@ -3,41 +3,55 @@
 {% block title %}Control de Luces{% endblock %}
 
 {% block body %}
-<div class="card">
-  <div class="row">
-    <div class="col-md-12 mb-4">
-      <h3 class="text-center mt-5 mb-3">Control de Luces</h3>
-      <hr />
-    </div>
-  </div>
-
-  <!-- Formulario de Control de Luces -->
-  <div class="row">
-    <div class="col-md-6 offset-md-3">
-      <form action="/control_luces" method="POST">
-        <div class="form-group">
-          <label for="departamento">Seleccionar Departamento:</label>
-          <select class="form-control" id="departamento" name="departamento">
+<div class="container mt-5">
+    <h3 class="text-center">Control de Luces</h3>
+    <form action="/control_luces" method="POST" class="mt-4">
+        <div class="mb-3">
+            <label for="departamento" class="form-label">Seleccionar Departamento:</label>
+            <select id="departamento" name="departamento" class="form-select">
+                <option value="" disabled selected>Seleccione un departamento</option>
+                {% for departamento in departamentos %}
+                <option value="{{ departamento.id_departamento }}" {% if departamento.color == "1" %}selected{% endif %}>
+                    {{ departamento.nombre_departamento }}
+                </option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="mb-3">
+            <label for="color" class="form-label">Seleccionar Color de Luz:</label>
+            <select id="color" name="color" class="form-select">
+                <option value="1">Blanco</option>
+                <option value="2">Amarillo</option>
+                <option value="3">Azul</option>
+                <option value="4">Rojo</option>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Aplicar</button>
+    </form>
+    <hr class="mt-5">
+    <h4 class="text-center">Estado Actual</h4>
+    <table class="table table-bordered mt-3">
+        <thead>
+            <tr>
+                <th>Departamento</th>
+                <th>Color Actual</th>
+            </tr>
+        </thead>
+        <tbody>
             {% for departamento in departamentos %}
-            <option value="{{ departamento.id_departamento }}">{{ departamento.nombre_departamento }}</option>
+            <tr>
+                <td>{{ departamento.nombre_departamento }}</td>
+                <td>
+                    {% if departamento.color == "1" %} Blanco
+                    {% elif departamento.color == "2" %} Amarillo
+                    {% elif departamento.color == "3" %} Azul
+                    {% elif departamento.color == "4" %} Rojo
+                    {% else %} Sin Configurar
+                    {% endif %}
+                </td>
+            </tr>
             {% endfor %}
-          </select>
-        </div>
-
-        <div class="form-group mt-3">
-          <label for="color">Seleccionar Color de Luz:</label>
-          <select class="form-control" id="color" name="color">
-            <option value="1">Blanco</option>
-            <option value="2">Rojo</option>
-            <option value="3">Azul</option>
-            <option value="4">Verde</option>
-          </select>
-        </div>
-
-        <button type="submit" class="btn btn-primary mt-3">Aplicar</button>
-      </form>
-    </div>
-  </div>
+        </tbody>
+    </table>
 </div>
-
 {% endblock %}

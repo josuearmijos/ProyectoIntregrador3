@@ -107,34 +107,38 @@ def control_luces():
         
         # Simulación de sesión
         if 'conectado' in session:
-         dataLogin = dataLoginSesion()
+            dataLogin = dataLoginSesion()
         else:
-         flash('Debes iniciar sesión primero', 'error')
-         return redirect(url_for('inicio'))
+            flash('Debes iniciar sesión primero', 'error')
+            return redirect(url_for('inicio'))
 
         if request.method == 'POST':
             # Obtener datos del formulario
             departamento_id = request.form.get('departamento')
             color = request.form.get('color')
 
-            # Actualizar color en la base de datos para el departamento del propietario
-            with conexion.cursor(dictionary=True) as cursor:
-                query = """
-                UPDATE configuracion_luces
-                SET color = %s
-                WHERE id_departamento = %s AND id_departamento IN (
-                    SELECT id_departamento
-                    FROM departamentos
-                    WHERE id_propietario = %s
-                )
-                """
-                cursor.execute(query, (color, departamento_id, dataLogin['id']))
-                conexion.commit()
+            if departamento_id and color:
+                # Actualizar color en la base de datos para el departamento del propietario
+                with conexion.cursor(dictionary=True) as cursor:
+                    query = """
+                    UPDATE configuracion_luces
+                    SET color = %s
+                    WHERE id_departamento = %s AND id_departamento IN (
+                        SELECT id_departamento
+                        FROM departamentos
+                        WHERE id_propietario = %s
+                    )
+                    """
+                    cursor.execute(query, (color, departamento_id, dataLogin['id']))
+                    conexion.commit()
+                    flash("El color de la luz se actualizó correctamente.", "success")
+            else:
+                flash("Por favor selecciona un departamento y un color válidos.", "error")
 
         # Obtener departamentos del usuario propietario
         with conexion.cursor(dictionary=True) as cursor:
             query = """
-            SELECT d.id_departamento, d.nombre_departamento, cl.color
+            SELECT d.id_departamento, d.nombre_departamento, COALESCE(cl.color, 'Sin Configurar') AS color
             FROM departamentos d
             LEFT JOIN configuracion_luces cl ON d.id_departamento = cl.id_departamento
             WHERE d.id_propietario = %s
@@ -147,7 +151,9 @@ def control_luces():
         return render_template('public/usuarios/control_luces.html', departamentos=departamentos, dataLogin=dataLogin)
     except Exception as e:
         print(f"Error: {e}")
+        flash("Ocurrió un error al procesar la solicitud.", "error")
         return render_template('public/usuarios/control_luces.html', departamentos=[], dataLogin={})
+
 
 
 
