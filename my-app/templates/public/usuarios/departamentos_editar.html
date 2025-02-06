@@ -1,26 +1,26 @@
 {% extends "public/base_cpanel.html" %}
 
-{% block title %}Editar Departamento{% endblock %}
+{% block title %}Editar Edificio{% endblock %}
 
 {% block body %}
 <div class="card">
   <div class="row">
     <div class="col-md-12 mb-4">
-      <h3 class="text-center mt-5 mb-3">Editar Departamento</h3>
+      <h3 class="text-center mt-5 mb-3">Editar Edificio</h3>
       <hr />
     </div>
   </div>
 
   <div class="row justify-content-center">
     <div class="col-md-6">
-      <form action="/editar-departamento/{{ departamento.id_departamento }}" method="post">
+      <form action="/editar-edificio/{{ edificio.id_edificio }}" method="post">
         <div class="mb-3">
-          <label for="name" class="form-label">Nombre del Departamento</label>
-          <input type="text" id="name" name="name" class="form-control" value="{{ departamento.nombre_departamento }}" required>
+          <label for="nombre_edificio" class="form-label">Nombre del Edificio</label>
+          <input type="text" id="nombre_edificio" name="nombre_edificio" class="form-control" value="{{ edificio.nombre_edificio }}" required>
         </div>
         <div class="mb-3">
-          <label for="id_propietario" class="form-label">ID del Propietario</label>
-          <input type="number" id="id_propietario" name="id_propietario" class="form-control" value="{{ departamento.id_propietario }}" required>
+          <label for="direccion" class="form-label">Dirección</label>
+          <input type="text" id="direccion" name="direccion" class="form-control" value="{{ edificio.direccion }}" required>
         </div>
         <button type="submit" class="btn btn-primary">Actualizar</button>
       </form>

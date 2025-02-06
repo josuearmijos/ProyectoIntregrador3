@@ -400,4 +400,42 @@ def obtener_registros_sensores():
     except Exception as e:
         print(f"Error en obtener_registros_sensores: {e}")
         return None  
+    
+def obtener_edificios():
+    try:
+        with connectionBD() as conexion_MySQLdb:
+            with conexion_MySQLdb.cursor(dictionary=True) as cursor:
+                querySQL = "SELECT id_edificio, nombre_edificio, direccion FROM edificios"
+                cursor.execute(querySQL)
+                edificios = cursor.fetchall()
+        return edificios
+    except Exception as e:
+        print(f"Error en obtener_edificios: {e}")
+        return []
+
+def crear_edificio(nombre_edificio, direccion):
+    try:
+        with connectionBD() as conexion_MySQLdb:
+            with conexion_MySQLdb.cursor(dictionary=True) as cursor:
+                querySQL = "INSERT INTO edificios (nombre_edificio, direccion) VALUES (%s, %s)"
+                cursor.execute(querySQL, (nombre_edificio, direccion))
+                conexion_MySQLdb.commit()
+                resultado_insertar = cursor.rowcount
+        return resultado_insertar
+    except Exception as e:
+        print(f"Error en crear_edificio: {e}")
+        return []
+
+def eliminar_edificio(id_edificio):
+    try:
+        with connectionBD() as conexion_MySQLdb:
+            with conexion_MySQLdb.cursor(dictionary=True) as cursor:
+                querySQL = "DELETE FROM edificios WHERE id_edificio=%s"
+                cursor.execute(querySQL, (id_edificio,))
+                conexion_MySQLdb.commit()
+                resultado_eliminar = cursor.rowcount
+        return resultado_eliminar
+    except Exception as e:
+        print(f"Error en eliminar_edificio: {e}")
+        return []
 

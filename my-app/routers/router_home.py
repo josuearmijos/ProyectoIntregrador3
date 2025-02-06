@@ -369,3 +369,13 @@ def historial_sensores():
     else:
         flash('primero debes iniciar sesión.', 'error')
         return redirect(url_for('inicio'))
+
+@app.route('/edificios', methods=['GET'])
+def edificios():
+    if 'conectado' in session:
+        return render_template('public/usuarios/edificios.html', edificios=obtener_edificios(), dataLogin=dataLoginSesion())
+    else:
+        flash('Primero debes iniciar sesión.', 'error')
+        return redirect(url_for('inicio'))
+
+
