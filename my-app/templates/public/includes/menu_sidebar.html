@@ -35,7 +35,6 @@
         <div data-i18n="Tables">Historial de Sensores</div>
       </a>
     </li>
-    {% if dataLogin.rol == 2 %}
     <li
       class="menu-item {% if request.path == '/reporte-accesos' %} active{% endif %}"
     >
@@ -44,7 +43,6 @@
         <div data-i18n="Tables">Control de Luz</div>
       </a>
     </li>
-    {% endif %}
     {% if dataLogin.rol == 1 %}
     <li
       class="menu-item {% if request.path == '/reporte-accesos' %} active{% endif %}"
