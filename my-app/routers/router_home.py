@@ -2,6 +2,7 @@ from controllers.funciones_login import *
 from app import app
 from flask import render_template, request, flash, redirect, url_for, session,  jsonify
 from mysql.connector.errors import Error
+from controllers.funciones_home import editarArea, eliminarArea
 
 
 # Importando cenexión a BD
@@ -10,10 +11,28 @@ from controllers.funciones_home import *
 @app.route('/lista-de-areas', methods=['GET'])
 def lista_areas():
     if 'conectado' in session:
-        return render_template('public/usuarios/lista_areas.html', areas=lista_areasBD(), dataLogin=dataLoginSesion())
+        try:
+            # Obtener lista de áreas y departamentos
+            conexion = connectionBD()
+            with conexion.cursor(dictionary=True) as cursor:
+                query = "SELECT * FROM departamentos"
+                cursor.execute(query)
+                departamentos = cursor.fetchall()
+
+            conexion.close()
+
+            return render_template('public/usuarios/lista_areas.html', 
+                                   areas=lista_areasBD(), 
+                                   departamentos=departamentos, 
+                                   dataLogin=dataLoginSesion())
+        except Exception as e:
+            print(f"Error al cargar las áreas y departamentos: {e}")
+            flash('Hubo un error al cargar las áreas y departamentos.', 'error')
+            return redirect(url_for('inicio'))
     else:
-        flash('primero debes iniciar sesión.', 'error')
+        flash('Primero debes iniciar sesión.', 'error')
         return redirect(url_for('inicio'))
+
 
 @app.route('/departamentos')
 def departamentos():
@@ -40,22 +59,45 @@ def crear_departamento():
     try:
         # Capturar datos del formulario
         nombre_departamento = request.form['nombre_departamento']
+        id_propietario = request.form['id_propietario_departamento']
+        id_edificio = request.form['id_edificio']  # Capturar el ID del edificio
 
         # Conexión a la base de datos
         conexion = connectionBD()
         with conexion.cursor() as cursor:
-            # Insertar el nuevo departamento
-            query = "INSERT INTO departamentos (nombre_departamento) VALUES (%s)"
-            cursor.execute(query, (nombre_departamento,))
-        conexion.commit()
-        conexion.close()
+            query = """
+                INSERT INTO departamentos (nombre_departamento, id_propietario, id_edificio)
+                VALUES (%s, %s, %s)
+            """
+            cursor.execute(query, (nombre_departamento, id_propietario, id_edificio))
+            conexion.commit()
 
-        flash("Departamento creado exitosamente.", "success")
-        return redirect('/lista-areas')
+        conexion.close()
+        flash('Departamento creado correctamente.', 'success')
+        return redirect(url_for('lista_areas'))  # Redirigir a la lista de áreas
     except Exception as e:
         print(f"Error al crear el departamento: {e}")
-        flash("Error al crear el departamento.", "danger")
-        return redirect('/lista-areas')
+        flash('Hubo un error al crear el departamento.', 'error')
+        return redirect(url_for('lista_areas'))  # Redirigir a la lista de áreas
+
+#editar  y eliminar areas
+@app.route('/eliminar-area/<int:id_area>', methods=['POST'])
+def eliminar_area(id_area):
+    resp = eliminarArea(id_area)
+    if resp['status'] == 'success':
+        flash(resp['message'], 'success')
+    else:
+        flash(resp['message'], 'error')
+    return redirect(url_for('lista_areas'))
+@app.route('/editar-area/<int:id_area>', methods=['POST'])
+def editar_area(id_area):
+    nuevo_nombre = request.form.get('nombre_area')
+    resp = editarArea(id_area, nuevo_nombre)
+    if resp['status'] == 'success':
+        flash(resp['message'], 'success')
+    else:
+        flash(resp['message'], 'error')
+    return redirect(url_for('lista_areas'))
 
 # Ruta para el control de luces
 @app.route('/control_luces', methods=['GET', 'POST'])
@@ -64,7 +106,11 @@ def control_luces():
         conexion = connectionBD()
         
         # Simulación de sesión
-        dataLogin = {'id': 1, 'rol': 1, 'cedula': '1234567890'}
+        if 'conectado' in session:
+         dataLogin = dataLoginSesion()
+        else:
+         flash('Debes iniciar sesión primero', 'error')
+         return redirect(url_for('inicio'))
 
         if request.method == 'POST':
             # Obtener datos del formulario
@@ -117,23 +163,32 @@ def editar_departamento(id_departamento):
             conexion = connectionBD()
             with conexion.cursor() as cursor:
                 # Actualizar los datos del departamento
-                query = "UPDATE departamentos SET nombre_departamento = %s, id_propietario = %s WHERE id_departamento = %s"
+                query = """
+                UPDATE departamentos 
+                SET nombre_departamento = %s, id_propietario = %s 
+                WHERE id_departamento = %s
+                """
                 cursor.execute(query, (nombre_departamento, id_propietario, id_departamento))
                 conexion.commit()
 
             conexion.close()
             flash('Departamento actualizado correctamente.', 'success')
-            return redirect(url_for('departamentos'))
+            return redirect(url_for('lista_areas'))
         except Exception as e:
             print(f"Error al actualizar el departamento: {e}")
             flash('Hubo un error al actualizar el departamento.', 'error')
             return redirect(url_for('editar_departamento', id_departamento=id_departamento))
 
     try:
-        # Obtener datos del departamento desde la base de datos
+        # Obtener datos del departamento y su edificio desde la base de datos
         conexion = connectionBD()
         with conexion.cursor(dictionary=True) as cursor:
-            query = "SELECT * FROM departamentos WHERE id_departamento = %s"
+            query = """
+            SELECT d.*, e.nombre_edificio
+            FROM departamentos d
+            LEFT JOIN edificios e ON d.id_edificio = e.id_edificio
+            WHERE d.id_departamento = %s
+            """
             cursor.execute(query, (id_departamento,))
             departamento = cursor.fetchone()
 
@@ -141,15 +196,30 @@ def editar_departamento(id_departamento):
 
         if not departamento:
             flash('El departamento no existe o no se encontró.', 'error')
-            return redirect(url_for('departamentos'))
+            return redirect(url_for('lista_areas'))
 
-        # Renderizar la página de edición
-        dataLogin = {'id': 1, 'rol': 1, 'cedula': '1234567890'}  # Simulación
-        return render_template('public/usuarios/departamentos_editar.html', departamento=departamento, dataLogin=dataLogin)
+        # Verificar si hay sesión activa
+        if 'conectado' in session:
+            dataLogin = {
+                "id": session.get('id'),
+                "name": session.get('name'),
+                "cedula": session.get('cedula'),
+                "rol": session.get('rol', 0)
+            }
+        else:
+            flash('Debes iniciar sesión primero', 'error')
+            return redirect(url_for('inicio'))
+
+        # Renderizar la página de edición con datos del departamento y el edificio
+        return render_template('public/usuarios/departamentos_editar.html', 
+                               departamento=departamento, 
+                               edificio=departamento.get('nombre_edificio', ''), 
+                               dataLogin=dataLogin)
     except Exception as e:
         print(f"Error al cargar el departamento: {e}")
-        flash('Hubo un error al cargar el departamento. 😔', 'error')
-        return redirect(url_for('departamentos'))
+        flash('Hubo un error al cargar el departamento.', 'error')
+        return redirect(url_for('lista_areas'))
+
 
 
 @app.route('/eliminar-departamento/<int:id_departamento>', methods=['POST'])
@@ -157,15 +227,30 @@ def eliminar_departamento(id_departamento):
     try:
         conexion = connectionBD()
         with conexion.cursor() as cursor:
+            # Verificar si el departamento existe antes de eliminarlo
+            query_check = "SELECT * FROM departamentos WHERE id_departamento = %s"
+            cursor.execute(query_check, (id_departamento,))
+            departamento = cursor.fetchone()
+
+            if not departamento:
+                flash('El departamento no existe.', 'error')
+                return redirect(url_for('lista_areas'))
+
+
+            # Eliminar el departamento
             query = "DELETE FROM departamentos WHERE id_departamento = %s"
             cursor.execute(query, (id_departamento,))
             conexion.commit()
 
         conexion.close()
-        return jsonify({'success': True})
+        flash('Departamento eliminado correctamente.', 'success')
     except Exception as e:
         print(f"Error al eliminar el departamento: {e}")
-        return jsonify({'success': False})
+        flash('Hubo un error al eliminar el departamento.', 'error')
+
+    return redirect(url_for('lista_areas'))
+
+
 
 @app.route('/obtener-departamentos', methods=['GET'])
 def obtener_departamentos():

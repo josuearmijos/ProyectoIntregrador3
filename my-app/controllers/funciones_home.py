@@ -251,7 +251,32 @@ def guardarClaveAuditoria(clave_audi,id):
         
     except Exception as e:
         return f'Se produjo un error en crear Clave: {str(e)}'
-    
+ #funciones area
+def editarArea(id, nuevo_nombre):
+    try:
+        conexion = connectionBD()
+        with conexion.cursor() as cursor:
+            query = "UPDATE area SET nombre_area = %s WHERE id_area = %s"
+            cursor.execute(query, (nuevo_nombre, id))
+            conexion.commit()
+        conexion.close()
+        return {"status": "success", "message": "Área actualizada correctamente."}
+    except Exception as e:
+        print(f"Error en editarArea: {e}")
+        return {"status": "error", "message": "Error al actualizar el área."}
+def eliminarArea(id):
+    try:
+        conexion = connectionBD()
+        with conexion.cursor() as cursor:
+            query = "DELETE FROM area WHERE id_area = %s"
+            cursor.execute(query, (id,))
+            conexion.commit()
+        conexion.close()
+        return {"status": "success", "message": "Área eliminada correctamente."}
+    except Exception as e:
+        print(f"Error en eliminarArea: {e}")
+        return {"status": "error", "message": "Error al eliminar el área."}
+  
 def lista_rolesBD():
     try:
         with connectionBD() as conexion_MYSQLdb:
